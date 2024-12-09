@@ -28,6 +28,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  TimeOfDay? fromTime , toTime;
+
 
   @override
   void initState() {
@@ -73,8 +75,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       return ListView(
                         children: [
                           TableCalendar(
+                            onDaySelected: (selectedDay, focusedDay) {
+                              
+                            },
                             calendarFormat: _calendarFormat,
-                            startingDayOfWeek: StartingDayOfWeek.monday,
+                            startingDayOfWeek: StartingDayOfWeek.sunday,
                             availableCalendarFormats: const {
                               CalendarFormat.month: 'Month',
                               CalendarFormat.week: 'Week',
@@ -86,6 +91,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                             onPageChanged: (focusDay) {
                               _focusedDay = focusDay;
                             },
+                            
                             selectedDayPredicate: (day) =>
                                 isSameDay(_selectedDay, day),
                             rangeStartDay: _rangeStart,
@@ -99,7 +105,73 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                             },
                             onRangeSelected: _onRangeSelected,
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor.withOpacity(.1),
+                                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                       fromTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (fromTime != null) {
+                                        setState(() {
+                                          
+                                        });
+                                      }
+                                    },
+                                    child: buildText(
+                                      fromTime != null ? 'Task starting at ${fromTime!.format(context)}' : 'Select Time From',
+                                      kPrimaryColor,
+                                      textSmall,
+                                      FontWeight.w400,
+                                      TextAlign.start,
+                                      TextOverflow.clip,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor.withOpacity(.1),
+                                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                       toTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (toTime != null) {
+                                        setState(() {
+                                          // Handle the selected time
+                                        });
+                                      }
+                                    },
+                                    child: buildText(
+                                      toTime != null ? 'Task ending at ${toTime!.format(context)}' : 'Select Time To',
+                                      kPrimaryColor,
+                                      textSmall,
+                                      FontWeight.w400,
+                                      TextAlign.start,
+                                      TextOverflow.clip,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 20),
@@ -216,7 +288,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                           title: title.text,
                                           description: description.text,
                                           startDateTime: _rangeStart,
-                                          stopDateTime: _rangeEnd);
+                                          stopDateTime: _rangeEnd,
+                                          startTime: fromTime!.format(context),
+                                          endTime: toTime!.format(context),
+                                          );
                                       context.read<TasksBloc>().add(
                                           AddNewTaskEvent(
                                               taskModel: taskModel));

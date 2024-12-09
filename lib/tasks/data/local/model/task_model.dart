@@ -5,6 +5,8 @@ class TaskModel {
   DateTime? startDateTime;
   DateTime? stopDateTime;
   bool completed;
+  String? startTime ;
+  String? endTime ;
 
   TaskModel({
     required this.id,
@@ -12,6 +14,8 @@ class TaskModel {
     required this.description,
     required this.startDateTime,
     required this.stopDateTime,
+    required this.startTime,
+    required this.endTime,
     this.completed = false,
   });
 
@@ -23,6 +27,8 @@ class TaskModel {
       'completed': completed,
       'startDateTime': startDateTime?.toIso8601String(),
       'stopDateTime': stopDateTime?.toIso8601String(),
+      'startTime': startTime,
+      'endTime': endTime,
     };
   }
 
@@ -35,6 +41,8 @@ class TaskModel {
       completed: json['completed'],
       startDateTime: DateTime.parse(json['startDateTime']),
       stopDateTime: DateTime.parse(json['stopDateTime']),
+      startTime: json['startTime'],
+      endTime: json['endTime'],
     );
   }
 
@@ -42,6 +50,6 @@ class TaskModel {
   String toString() {
     return 'TaskModel{id: $id, title: $title, description: $description, '
         'startDateTime: $startDateTime, stopDateTime: $stopDateTime, '
-        'completed: $completed}';
+        'completed: $completed , startTime: $startTime, endTime: $endTime}';
   }
 }

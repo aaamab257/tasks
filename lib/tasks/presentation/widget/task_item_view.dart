@@ -36,25 +36,28 @@ class _TaskItemViewState extends State<TaskItemView> {
                       description: widget.taskModel.description,
                       completed: !widget.taskModel.completed,
                       startDateTime: widget.taskModel.startDateTime,
-                      stopDateTime: widget.taskModel.stopDateTime);
-                  context.read<TasksBloc>().add(
-                      UpdateTaskEvent(taskModel: taskModel));
+                      stopDateTime: widget.taskModel.stopDateTime,
+                      startTime: widget.taskModel.startTime,
+                      endTime: widget.taskModel.endTime);
+                  context
+                      .read<TasksBloc>()
+                      .add(UpdateTaskEvent(taskModel: taskModel));
                 }),
             Expanded(
               child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: buildText(
-                          widget.taskModel.title,
-                          kBlackColor,
-                          textMedium,
-                          FontWeight.w500,
-                          TextAlign.start,
-                          TextOverflow.clip)),
+                      Expanded(
+                          child: buildText(
+                              widget.taskModel.title,
+                              kBlackColor,
+                              textMedium,
+                              FontWeight.w500,
+                              TextAlign.start,
+                              TextOverflow.clip)),
                       PopupMenuButton<int>(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -65,13 +68,14 @@ class _TaskItemViewState extends State<TaskItemView> {
                           switch (value) {
                             case 0:
                               {
-                                Navigator.pushNamed(context, Pages.updateTask, arguments: widget.taskModel);
+                                Navigator.pushNamed(context, Pages.updateTask,
+                                    arguments: widget.taskModel);
                                 break;
                               }
                             case 1:
                               {
-                                context.read<TasksBloc>().add(
-                                    DeleteTaskEvent(taskModel: widget.taskModel));
+                                context.read<TasksBloc>().add(DeleteTaskEvent(
+                                    taskModel: widget.taskModel));
                                 break;
                               }
                           }
@@ -122,42 +126,76 @@ class _TaskItemViewState extends State<TaskItemView> {
                             ),
                           ];
                         },
-                        child: SvgPicture.asset('assets/svgs/vertical_menu.svg'),
+                        child:
+                            SvgPicture.asset('assets/svgs/vertical_menu.svg'),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5,),
-                  buildText(
-                      widget.taskModel
-                          .description,
-                      kGrey1,
-                      textSmall,
-                      FontWeight.normal,
-                      TextAlign.start,
-                      TextOverflow.clip),
-                  const SizedBox(height: 15,),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(.1),
-                        borderRadius: const BorderRadius.all(Radius.circular(5))
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset('assets/svgs/calender.svg', width: 12,),
-                        const SizedBox(width: 10,),
-                        Expanded(child: buildText(
-                            '${formatDate(dateTime: widget.taskModel
-                                .startDateTime.toString())} - ${formatDate(dateTime: widget.taskModel
-                                .stopDateTime.toString())}', kBlackColor, textTiny,
-                            FontWeight.w400, TextAlign.start, TextOverflow.clip),)
-                      ],
-                    )
+                  const SizedBox(
+                    height: 5,
                   ),
+                  buildText(widget.taskModel.description, kGrey1, textSmall,
+                      FontWeight.normal, TextAlign.start, TextOverflow.clip),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(.1),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5))),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/calender.svg',
+                                width: 12,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: buildText(
+                                    '${formatDate(dateTime: widget.taskModel.startDateTime.toString())} - ${formatDate(dateTime: widget.taskModel.stopDateTime.toString())}',
+                                    kBlackColor,
+                                    textTiny,
+                                    FontWeight.w400,
+                                    TextAlign.start,
+                                    TextOverflow.clip),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.timelapse , size: 15,),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: buildText(
+                                    ' Start in ${widget.taskModel.startTime} - End ${widget.taskModel.endTime}',
+                                    kBlackColor,
+                                    textTiny,
+                                    FontWeight.w400,
+                                    TextAlign.start,
+                                    TextOverflow.clip),
+                              )
+                            ],
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
           ],
         ));
   }

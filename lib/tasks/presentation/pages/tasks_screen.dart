@@ -41,7 +41,7 @@ class _TasksScreenState extends State<TasksScreen> {
             child: Scaffold(
           backgroundColor: kWhiteColor,
           appBar: CustomAppBar(
-            title: 'Jerome',
+            title: '',
             showBackArrow: false,
             actionWidgets: [
               PopupMenuButton<int>(
@@ -97,48 +97,48 @@ class _TasksScreenState extends State<TasksScreen> {
                         ],
                       ),
                     ),
-                    PopupMenuItem<int>(
-                      value: 1,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/task_checked.svg',
-                            width: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          buildText(
-                              'Completed tasks',
-                              kBlackColor,
-                              textSmall,
-                              FontWeight.normal,
-                              TextAlign.start,
-                              TextOverflow.clip)
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<int>(
-                      value: 2,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/task.svg',
-                            width: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          buildText(
-                              'Pending tasks',
-                              kBlackColor,
-                              textSmall,
-                              FontWeight.normal,
-                              TextAlign.start,
-                              TextOverflow.clip)
-                        ],
-                      ),
-                    ),
+                    // PopupMenuItem<int>(
+                    //   value: 1,
+                    //   child: Row(
+                    //     children: [
+                    //       SvgPicture.asset(
+                    //         'assets/svgs/task_checked.svg',
+                    //         width: 15,
+                    //       ),
+                    //       const SizedBox(
+                    //         width: 10,
+                    //       ),
+                    //       buildText(
+                    //           'Completed tasks',
+                    //           kBlackColor,
+                    //           textSmall,
+                    //           FontWeight.normal,
+                    //           TextAlign.start,
+                    //           TextOverflow.clip)
+                    //     ],
+                    //   ),
+                    // ),
+                    // PopupMenuItem<int>(
+                    //   value: 2,
+                    //   child: Row(
+                    //     children: [
+                    //       SvgPicture.asset(
+                    //         'assets/svgs/task.svg',
+                    //         width: 15,
+                    //       ),
+                    //       const SizedBox(
+                    //         width: 10,
+                    //       ),
+                    //       buildText(
+                    //           'Pending tasks',
+                    //           kBlackColor,
+                    //           textSmall,
+                    //           FontWeight.normal,
+                    //           TextAlign.start,
+                    //           TextOverflow.clip)
+                    //     ],
+                    //   ),
+                    // ),
                   ];
                 },
                 child: Padding(

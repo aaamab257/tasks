@@ -30,6 +30,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  TimeOfDay? fromTime, toTime;
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
     setState(() {
@@ -54,6 +55,16 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
     _selectedDay = _focusedDay;
     _rangeStart = widget.taskModel.startDateTime;
     _rangeEnd = widget.taskModel.stopDateTime;
+    // fromTime = widget.taskModel.startTime != null
+    //     ? TimeOfDay(
+    //         hour: int.parse(widget.taskModel.startTime!.split(":")[0]),
+    //         minute: int.parse(widget.taskModel.startTime!.split(":")[1]))
+    //     : null;
+    // toTime = widget.taskModel.endTime != null
+    //     ? TimeOfDay(
+    //         hour: int.parse(widget.taskModel.endTime!.split(":")[0]),
+    //         minute: int.parse(widget.taskModel.endTime!.split(":")[1]))
+    //     : null;
     super.initState();
   }
 
@@ -77,8 +88,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                     child: BlocConsumer<TasksBloc, TasksState>(
                         listener: (context, state) {
                       if (state is UpdateTaskFailure) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            getSnackBar(state.error, kRed));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(getSnackBar(state.error, kRed));
                       }
                       if (state is UpdateTaskSuccess) {
                         Navigator.pop(context);
@@ -131,7 +142,79 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                                 TextAlign.start,
                                 TextOverflow.clip),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor.withOpacity(.1),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5)),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      fromTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (fromTime != null) {
+                                        setState(() {});
+                                      }
+                                    },
+                                    child: buildText(
+                                      fromTime == null
+                                          ? 'Task starting at ${widget.taskModel.startTime}'
+                                          : 'Task starting at ${fromTime!.format(context)}',
+                                      kPrimaryColor,
+                                      textSmall,
+                                      FontWeight.w400,
+                                      TextAlign.start,
+                                      TextOverflow.clip,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor.withOpacity(.1),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(5)),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      toTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (toTime != null) {
+                                        setState(() {
+                                          // Handle the selected time
+                                        });
+                                      }
+                                    },
+                                    child: buildText(
+                                      toTime == null
+                                          ? 'Task ending at ${widget.taskModel.endTime}'
+                                          : 'Task ending at ${toTime!.format(context)}',
+                                      kPrimaryColor,
+                                      textSmall,
+                                      FontWeight.w400,
+                                      TextAlign.start,
+                                      TextOverflow.clip,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
                           buildText(
                               'Title',
                               kBlackColor,
@@ -193,7 +276,9 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                                       description: description.text,
                                       completed: widget.taskModel.completed,
                                       startDateTime: _rangeStart,
-                                      stopDateTime: _rangeEnd);
+                                      stopDateTime: _rangeEnd,
+                                      startTime: fromTime!.format(context),
+                                      endTime: toTime!.format(context));
                                   context.read<TasksBloc>().add(
                                       UpdateTaskEvent(taskModel: taskModel));
                                 },
